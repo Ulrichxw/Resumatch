@@ -1,0 +1,18 @@
+# Java compiled files
+*.class
+
+# Environment variables and secrets
+.env
+.env.*
+
+# Dependencies
+node_modules/
+
+# Build outputs
+bin/
+build/
+out/
+
+# IDE settings
+.vscode/
+.idea/
