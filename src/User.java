@@ -12,8 +12,9 @@ public abstract class User {
     private final int id; //final means unique and cannot be changed after initialization
     private String name;
     private String email;
-    private String passwordHash;   // we never keep the real password
+    private String passwordHash;   // we never keep the real password so we use a hash
 
+    //public constructor for the User class that takes name, email, and password as parameters. It initializes the user's id, name, email, and password hash from the child class (Admin, Employer, JobSeeker) that extends User. The constructor also increments the nextId static variable to ensure each user has a unique id.
     public User(String name, String email, String password) {
         this.id = nextId++; //assign a unique id to each user and increment for the next user
         setName(name);
