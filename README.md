@@ -10,7 +10,7 @@ to their qualifications. Employers, on the other hand, can post job vacancies, r
 before they become available on the platform. Through these functionalities, ResuMatch aims to simplify resume preparation, improve the alignment between applicants' qualifications and job requirements, and provide a
 centralized platform for job seekers and employers.
 
-Features
+Features:
 1. Job Matching - Calculates the Qualifications for a specific Job Posting\
 2. Generates Resume - Based on the information of the applicant in their account
 
