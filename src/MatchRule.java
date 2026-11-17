@@ -1,3 +1,5 @@
+//Declaring of methods that will be used to score applicants based on the job posting
+
 public interface MatchRule {
 
     String getName();
