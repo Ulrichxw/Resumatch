@@ -1,25 +1,41 @@
-#📃RESUMATCH
 
-Description:
-The job application process requires applicants to present their qualifications, skills, and experiences in a way that aligns with the requirements of their desired positions. However, many applicants, particularly 
-fresh graduates and individuals with limited resume-writing experience, may struggle to create and tailor their resumes for different job opportunities. Using a generic resume for multiple applications may also make
-it difficult to effectively highlight the qualifications and competencies relevant to a specific position. To address this concern, ResuMatch is developed as a web-based job matching and resume generation platform 
-designed to simplify the job application process. It allows applicants to create profiles containing their educational background, work experience, achievements, certifications, soft skills, and hard skills, which can
-be used to generate AI-powered resumes tailored to selected job descriptions through the Gemini API. The platform also provides job recommendations based on applicants' profiles, helping them discover opportunities relevant
-to their qualifications. Employers, on the other hand, can post job vacancies, review submitted applications, and accept or reject applicants, while administrators are responsible for reviewing and approving job postings
-before they become available on the platform. Through these functionalities, ResuMatch aims to simplify resume preparation, improve the alignment between applicants' qualifications and job requirements, and provide a
-centralized platform for job seekers and employers.
 
-Features:
-1. Job Matching - Calculates the Qualifications for a specific Job Posting\
-2. Generates Resume - Based on the information of the applicant in their account
+## **📄📎 I. Overview**  
 
-Users:
-1. Admin - approves or rejects Job Posting from the employer
-2. Employer - Creates Job Posting.
-3. Applicant - Applies for a Job Vacancy.
+**RESUMATCH** is a web-based platform designed to make the job application process easier for applicants and employers. It allows applicants to create profiles containing their educational background, work experience, achievements, certifications, soft skills, and hard skills. Using the information saved in their profiles, applicants can generate resumes tailored to the requirements of their chosen job positions through the Gemini API. The platform also recommends job vacancies based on their qualifications. Meanwhile, employers can post job openings and manage applications, while administrators review and approve job postings before they become available on the platform.
 
-Members:
-1. Fernandez, John Ulrich P. - BackEnd Developer
-2. Tatlonghari, Alison G. - FrontEnd Developer
-3. Sulit, Czarina Jessie D. - Documentation
+
+
+---
+
+## **🏗 II. System Architecture**  
+
+### **🌐 Frontend**  
+- **Technologies**: HTML, CSS, JavaScript  
+- **Features**:  
+  - Responsive design for various devices.  
+  - Fetch API for communication with the backend.
+  - Resume Formatting  
+
+### **🖥 Backend**  
+- **Language**: Java  
+
+## **💻 III. Applied OOP Concepts**  
+- **Inheritance**:  
+   - Applicant, Employer and Admin extend User. The four handlers extend ApiHandler.  
+- **Polymorphism**:  
+   - each User subclass overrides getRoleName() and getWelcomeMessage(), and each handler overrides respond(). The five match rules also share one score() method. 
+- **Encapsulation**:  
+   - fields are private with getters and setters. Setters refuse bad data, and status changes like approve() and close() check the current status first.  
+- **Abstraction**:  
+   - User and ApiHandler are abstract classes, and MatchRule is an interface.  
+
+---
+
+## **👥 X. Members** 
+-**Lead Developer**:
+  -John Ulrich P. Fernandez
+-**UI Designer**:
+  -Alison Tatlonghari
+-**Documentation**:
+  -Czarina Sulit
