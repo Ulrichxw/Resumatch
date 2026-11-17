@@ -2,9 +2,9 @@ public interface MatchRule {
 
     String getName();
 
-    /** Share of the final score, from 0 to 1. All the weights together make 1. */
+    //this is for the weighted average
     double getWeight();
 
-    /** A score from 0 to 100. Missing information scores 0. */
+    //returns a score between 0 and 1, where 1 is a perfect match
     double score(Applicant applicant, JobPosting job);
 }
