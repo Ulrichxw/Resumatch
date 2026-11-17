@@ -1,5 +1,3 @@
-
-
 ## **📄📎 I. Overview**  
 
 **RESUMATCH** is a web-based platform designed to make the job application process easier for applicants and employers. It allows applicants to create profiles containing their educational background, work experience, achievements, certifications, soft skills, and hard skills. Using the information saved in their profiles, applicants can generate resumes tailored to the requirements of their chosen job positions through the Gemini API. The platform also recommends job vacancies based on their qualifications. Meanwhile, employers can post job openings and manage applications, while administrators review and approve job postings before they become available on the platform.
@@ -32,10 +30,10 @@
 
 ---
 
-## **👥 X. Members** 
--**Lead Developer**:
-  -John Ulrich P. Fernandez
--**UI Designer**:
-  -Alison Tatlonghari
--**Documentation**:
-  -Czarina Sulit
+## **👥 IV. Members**  
+- **Lead Developer**:  
+   - John Ulrich P. Fernandez  
+- **UI Designer**:  
+   - Alison Tatlonghari 
+- **Documentation**:  
+   - Czarina Sulit  
