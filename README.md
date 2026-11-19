@@ -4,7 +4,7 @@
 
 ---
 
-## **📄📎 I. Project Overview**
+## **📄📎 I. Project Description**
 
 **RESUMATCH** is a web-based platform designed to simplify the job application and recruitment process by connecting job seekers with suitable employment opportunities. It allows applicants to create profiles containing their educational background, work experience, achievements, certifications, soft skills, and hard skills.
 
@@ -35,8 +35,8 @@ The project aims to:
 3. Integrate the Gemini API to generate customized resumes based on selected job descriptions.
 4. Provide employers with tools to publish job openings and manage applications.
 5. Allow administrators to review and approve job postings before publication.
-6. Provide an organized application tracking system for applicants and employers.
-7. Demonstrate the application of Object-Oriented Programming concepts in developing a functional web-based system.
+6. Provide an organized application status system for applicants and employers.
+8. Demonstrate the application of Object-Oriented Programming concepts in developing a functional web-based system.
 
 ---
 
@@ -47,7 +47,7 @@ The project aims to:
 - Browse recommended job vacancies.
 - Generate AI-assisted customized resumes.
 - Submit job applications.
-- Monitor application status and history.
+- Monitor application status.
 
 **Employers / Recruiters**
 - Create and manage job postings.
@@ -62,7 +62,7 @@ The project aims to:
 
 ---
 
-## **🤖 V. System Features**
+## **🤖 V. Main Features**
 
 **AI-Powered Resume Generation**
 - Generates customized resumes using the applicant's saved profile information.
@@ -70,9 +70,8 @@ The project aims to:
 - Highlights relevant skills, education, and work experience.
 - Provides resume preview and PDF export.
 
-**Job Matching and Recommendations**
-- Recommends job vacancies based on the applicant's qualifications, skills, and experience.
-- Displays matching scores to help applicants identify suitable opportunities.
+**Job Matching**
+- Matches job vacancies based on the applicant's qualifications, skills, and experience.
 
 **Applicant Profile Management**
 - Allows applicants to manage their educational background and work experience.
@@ -81,7 +80,7 @@ The project aims to:
 **Job Application Management**
 - Allows applicants to submit applications for available job positions.
 - Prevents duplicate applications for the same job posting.
-- Provides application history and status tracking.
+- Provides status tracking.
 
 **Employer Dashboard**
 - Allows employers to create and manage job postings.
@@ -102,9 +101,9 @@ The project aims to:
 - **Features**:
   - Responsive user interface.
   - Login and registration pages.
-  - Applicant and employer dashboards.
+  - Applicant, Admin and employer dashboards.
   - Job listings and matching scores.
-  - Application forms and tracking.
+  - Application forms and tracking status.
   - Admin job approval and skill-review screens.
   - Resume formatting, preview, and PDF export.
 
@@ -120,15 +119,6 @@ The project aims to:
   - Gemini API integration for AI-powered resume generation.
   - Skill suggestion and approval services.
 
-### **🗄 Database**
-- **Database Management System**: MySQL
-- **Features**:
-  - Stores user accounts and applicant profiles.
-  - Manages educational background, skills, and work experience.
-  - Stores job postings and applications.
-  - Maintains application history and status.
-  - Stores information for authentication and access control.
-
 ### **🔗 External API**
 - **Gemini API**:
   - Generates AI-assisted customized resumes.
@@ -142,7 +132,6 @@ The project aims to:
 |---|---|
 | Java | Main programming language and backend development |
 | Spring Boot | Backend application framework |
-| MySQL | Database management |
 | HTML | Webpage structure |
 | CSS | Website styling and layout |
 | JavaScript | Frontend interactions |
@@ -160,7 +149,6 @@ The project aims to:
 
 **Abstraction**
 - Separates essential system operations from their internal implementation.
-- Uses services and interfaces to organize backend functionality.
 
 **Inheritance**
 - Allows classes to inherit shared properties and behaviors from parent classes, where applicable.
@@ -179,8 +167,7 @@ The project aims to:
 Before running ResuMatch, make sure you have the following installed:
 
 - Java Development Kit (JDK)
-- MySQL Server
-- IntelliJ IDEA, Eclipse, or Visual Studio Code
+- Visual Studio Code
 - Git
 - A web browser
 - Gemini API key
@@ -242,7 +229,7 @@ The following are potential limitations to document during development and testi
 
 - Resume generation depends on the availability and proper configuration of the Gemini API.
 - Job recommendations depend on the accuracy and completeness of applicant profile information and job requirements.
-- The system requires an active database connection to store and retrieve information.
+- No Database included
 - AI-generated resume content may require manual review and correction by applicants.
 - The accuracy of job matching depends on the information provided by applicants and employers.
 
@@ -257,6 +244,7 @@ The following are potential limitations to document during development and testi
 - Providing analytics and recruitment reports for employers.
 - Improving mobile responsiveness and overall user experience.
 - Adding more security measures and data protection features.
+- Adding Database for record purposes.
 
 ---
 
@@ -266,9 +254,9 @@ The following are potential limitations to document during development and testi
 
 | Contributor | Main Contribution |
 |---|---|
-| Tatlonghari | Database, Authentication, and Security |
-| Fernandez | Backend Development, Job Matching, Applications, and Gemini API |
-| Sulit | Frontend Development, Admin Interfaces, and Resume Generation Interface |
+| Tatlonghari, Alison G.|Frontend Development|
+| Fernandez, John Ulrich P.| Backend Development |
+| Sulit, Czarina Jessie D. | Documentation|
 
 ---
 
@@ -277,4 +265,4 @@ The following are potential limitations to document during development and testi
 - **Project Name**: ResuMatch
 - **Project Course**: OOP 101 – Object-Oriented Programming
 - **Project Type**: Web-Based Application
-- **Development Team**: ResuMatch
+- **Development Team**: Jobless
