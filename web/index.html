@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ResuMatch</title>
+<style>
+  :root { --ink:#1b2340; --soft:#566083; --paper:#f4f6fa; --line:#dde2ee; --marker:#ffd84a; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: "Segoe UI", system-ui, sans-serif; color:var(--ink); background:var(--paper); line-height:1.5; }
+  header { background:var(--ink); color:#fff; padding:.8rem 1.2rem; display:flex; gap:1rem; align-items:center; flex-wrap:wrap; }
+  .brand { font-size:1.3rem; font-weight:700; }
+  #who { flex:1; color:#c9d0ea; font-size:.95rem; }
+  main { max-width:960px; margin:0 auto; padding:1.2rem; }
+  h2 { margin:.2rem 0 .8rem; } h3 { margin:0 0 .3rem; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:10px; padding:1rem 1.2rem; margin-bottom:1rem; }
+  label { display:block; font-weight:600; font-size:.9rem; margin:.7rem 0 .2rem; }
+  input, select, textarea { width:100%; padding:.5rem .6rem; font:inherit; border:1.5px solid var(--line); border-radius:6px; }
+  textarea { min-height:5rem; resize:vertical; }
+  button { font:inherit; font-weight:600; padding:.5rem 1rem; border-radius:6px; border:1.5px solid var(--ink); background:var(--ink); color:#fff; cursor:pointer; }
+  button.light { background:#fff; color:var(--ink); }
+  button.warn { background:#fff; color:#ad2217; border-color:#ad2217; }
+  button.mark { background:var(--marker); border-color:var(--marker); color:var(--ink); }
+  button:disabled { opacity:.5; cursor:wait; }
+  .row { display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.8rem; }
+  .tabs { display:flex; gap:.5rem; margin-bottom:1rem; flex-wrap:wrap; }
+  .tabs button { background:#fff; color:var(--ink); border-color:var(--line); }
+  .tabs button.active { background:var(--ink); color:#fff; border-color:var(--ink); }
+  .hidden { display:none !important; }
+  .muted { color:var(--soft); font-size:.9rem; }
+  .grid2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1rem; }
+  #message { min-height:1.5rem; font-weight:600; }
+  #message.error { color:#ad2217; } #message.ok { color:#1c7048; }
+  .score { font-size:1.4rem; font-weight:700; padding:0 .4rem; background:linear-gradient(transparent 42%, var(--marker) 42%, var(--marker) 92%, transparent 92%); }
+  .head { display:flex; justify-content:space-between; gap:1rem; align-items:flex-start; }
+  .badge { display:inline-block; padding:.1rem .6rem; border-radius:99px; font-size:.85rem; font-weight:600; background:var(--line); }
+  .PENDING { background:#fff0c7; } .APPROVED, .ACCEPTED { background:#dcf3e6; } .REJECTED { background:#fde6e3; } .CLOSED { background:var(--line); }
+  pre { white-space:pre-wrap; font-family:inherit; background:var(--paper); padding:.8rem; border-radius:6px; }
+  #resumeText { min-height:22rem; font-family:Consolas, monospace; font-size:.9rem; }
+</style>
+</head>
+<body>
+<header>
+  <span class="brand">ResuMatch</span>
+  <span id="who"></span>
+  <button id="logoutBtn" class="light hidden" onclick="logout()">Log out</button>
+</header>
+
+<main>
+<p id="message" role="status"></p>
+
+<!-- ============ LOG IN / REGISTER ============ -->
+<section id="authView" class="grid2">
+  <div class="card">
+    <h2>Log in</h2>
+    <form id="loginForm">
+      <label for="loginEmail">Email</label><input id="loginEmail" name="email" type="email" required>
+      <label for="loginPassword">Password</label><input id="loginPassword" name="password" type="password" required>
+      <div class="row"><button type="submit">Log in</button></div>
+    </form>
+    <p class="muted">Sample accounts: student@demo.com, employer@demo.com (password demo123) and admin@resumatch.com (password admin123).</p>
+  </div>
+  <div class="card">
+    <h2>Create an account</h2>
+    <form id="registerForm">
+      <label for="regRole">I am an</label>
+      <select id="regRole" name="role"><option value="applicant">Applicant (looking for a job)</option><option value="employer">Employer (hiring)</option></select>
+      <label for="regName">Full name</label><input id="regName" name="name" required>
+      <label for="regEmail">Email</label><input id="regEmail" name="email" type="email" required>
+      <label for="regPassword">Password (6 or more characters)</label><input id="regPassword" name="password" type="password" minlength="6" required>
+      <div id="companyField" class="hidden"><label for="regCompany">Company name</label><input id="regCompany" name="company"></div>
+      <div class="row"><button type="submit">Create account</button></div>
+    </form>
+  </div>
+</section>
+
+<!-- ============ APPLICANT ============ -->
+<section id="applicantView" class="hidden">
+  <div class="tabs">
+    <button data-group="a" data-tab="a-profile">My profile</button>
+    <button data-group="a" data-tab="a-jobs">Job recommendations</button>
+    <button data-group="a" data-tab="a-apps">My applications</button>
+  </div>
+
+  <div class="panel card" data-group="a" id="tab-a-profile">
+    <h2>My profile</h2>
+    <form id="profileForm">
+      <label for="pSummary">Professional summary</label><textarea id="pSummary" name="summary"></textarea>
+      <label for="pDegree">Degree</label><input id="pDegree" name="degree" placeholder="BS Information Technology">
+      <label for="pSkills">Skills (separate with commas)</label><input id="pSkills" name="skills" placeholder="Java, SQL, Teamwork">
+      <label for="pExperience">Work experience</label><textarea id="pExperience" name="experience"></textarea>
+      <label for="pCerts">Certifications (separate with commas, optional)</label><input id="pCerts" name="certifications">
+      <label for="pProjects">Projects (optional)</label><textarea id="pProjects" name="projects"></textarea>
+      <div class="row"><button type="submit">Save profile</button></div>
+    </form>
+  </div>
+
+  <div class="panel hidden" data-group="a" id="tab-a-jobs">
+    <div id="resumeBox" class="card hidden">
+      <h2 id="resumeTitle">Resume</h2>
+      <p class="muted">You can edit the text. Apply saves it and sends a copy to the employer.</p>
+      <textarea id="resumeText" aria-label="Resume text"></textarea>
+      <div class="row">
+        <button class="light" onclick="saveResume()">Save</button>
+        <button class="light" onclick="printResume()">Print or save as PDF</button>
+        <button class="mark" onclick="applyNow()">Apply with this resume</button>
+        <button class="light" onclick="closeResume()">Close</button>
+      </div>
+    </div>
+    <div id="jobList"></div>
+  </div>
+
+  <div class="panel hidden" data-group="a" id="tab-a-apps"><div id="applicationList"></div></div>
+</section>
+
+<!-- ============ EMPLOYER ============ -->
+<section id="employerView" class="hidden">
+  <div class="tabs">
+    <button data-group="e" data-tab="e-post">Post a job</button>
+    <button data-group="e" data-tab="e-jobs">My job postings</button>
+    <button data-group="e" data-tab="e-apps">Applications received</button>
+  </div>
+
+  <div class="panel card" data-group="e" id="tab-e-post">
+    <h2>Post a job</h2>
+    <p class="muted">A new posting must be approved by the admin before applicants can see it.</p>
+    <form id="jobForm">
+      <label for="jTitle">Job title</label><input id="jTitle" name="title" required>
+      <div class="grid2">
+        <div><label for="jLocation">Location</label><input id="jLocation" name="location" required></div>
+        <div><label for="jSalary">Salary range</label><input id="jSalary" name="salary" required></div>
+      </div>
+      <label for="jDeadline">Application deadline</label><input id="jDeadline" name="deadline" type="date" required>
+      <label for="jSkills">Required skills (separate with commas)</label><input id="jSkills" name="requiredSkills" placeholder="Java, SQL" required>
+      <label for="jDescription">Description and responsibilities</label><textarea id="jDescription" name="description" required></textarea>
+      <label for="jQualifications">Qualifications</label><textarea id="jQualifications" name="qualifications" required></textarea>
+      <div class="row"><button type="submit">Submit for approval</button></div>
+    </form>
+  </div>
+  <div class="panel hidden" data-group="e" id="tab-e-jobs"><div id="myJobList"></div></div>
+  <div class="panel hidden" data-group="e" id="tab-e-apps"><div id="receivedList"></div></div>
+</section>
+
+<!-- ============ ADMIN ============ -->
+<section id="adminView" class="hidden">
+  <h2>Job postings waiting for approval</h2>
+  <div id="pendingList"></div>
+</section>
+</main>
+
+<script>
+// ---------- helpers ----------
+let token = sessionStorage.getItem('token');
+const $ = (id) => document.getElementById(id);
+
+/** Makes text safe to put inside HTML, so users cannot inject code. */
+function esc(text) {
+  return String(text ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+function say(text, kind) {
+  $('message').textContent = text || '';
+  $('message').className = kind || '';
+}
+
+/** Talks to the Java server. Pass data to send a form (POST), or leave it out to just read (GET). */
+async function api(path, data) {
+  const options = { headers: { 'X-Token': token || '' } };
+  if (data) {
+    options.method = 'POST';
+    options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+    options.body = new URLSearchParams(data).toString();
+  }
+  const response = await fetch(path, options);
+  const json = await response.json();
+  if (!response.ok) throw new Error(json.error || 'Something went wrong.');
+  return json;
+}
+
+/** Runs an action and shows any error message on the page. */
+async function run(action) {
+  try { say(''); return await action(); }
+  catch (error) { say(error.message, 'error'); }
+}
+
+const formValues = (form) => Object.fromEntries(new FormData(form));
+
+// ---------- tabs ----------
+const loaders = {
+  'a-profile': loadProfile, 'a-jobs': loadJobs, 'a-apps': loadApplications,
+  'e-post': () => {}, 'e-jobs': loadMyJobs, 'e-apps': loadReceived,
+};
+
+function openTab(group, name) {
+  document.querySelectorAll(`button[data-group="${group}"]`).forEach((b) => b.classList.toggle('active', b.dataset.tab === name));
+  document.querySelectorAll(`.panel[data-group="${group}"]`).forEach((p) => p.classList.toggle('hidden', p.id !== 'tab-' + name));
+  say('');
+  run(loaders[name]);
+}
+document.querySelectorAll('button[data-tab]').forEach((b) => b.addEventListener('click', () => openTab(b.dataset.group, b.dataset.tab)));
+
+// ---------- log in, register, log out ----------
+function enter(info) {
+  token = info.token || token;
+  sessionStorage.setItem('token', token);
+  $('who').textContent = info.welcome;
+  $('logoutBtn').classList.remove('hidden');
+  ['authView', 'applicantView', 'employerView', 'adminView'].forEach((id) => $(id).classList.add('hidden'));
+  if (info.role === 'Applicant') { $('applicantView').classList.remove('hidden'); openTab('a', 'a-profile'); }
+  if (info.role === 'Employer') { $('employerView').classList.remove('hidden'); openTab('e', 'e-post'); }
+  if (info.role === 'Admin') { $('adminView').classList.remove('hidden'); run(loadPending); }
+}
+
+async function logout() {
+  await run(() => api('/api/auth/logout', {}));
+  sessionStorage.removeItem('token');
+  location.reload();
+}
+
+$('loginForm').addEventListener('submit', (e) => { e.preventDefault(); run(async () => enter(await api('/api/auth/login', formValues(e.target)))); });
+$('registerForm').addEventListener('submit', (e) => { e.preventDefault(); run(async () => enter(await api('/api/auth/register', formValues(e.target)))); });
+$('regRole').addEventListener('change', (e) => {
+  $('companyField').classList.toggle('hidden', e.target.value !== 'employer');
+  $('regCompany').required = e.target.value === 'employer';
+});
+
+// ---------- applicant ----------
+async function loadProfile() {
+  const p = await api('/api/applicant/profile');
+  $('pSummary').value = p.summary; $('pDegree').value = p.degree; $('pSkills').value = p.skills;
+  $('pExperience').value = p.experience; $('pCerts').value = p.certifications; $('pProjects').value = p.projects;
+}
+
+$('profileForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  run(async () => { await api('/api/applicant/saveProfile', formValues(e.target)); say('Profile saved.', 'ok'); });
+});
+
+async function loadJobs() {
+  const jobs = await api('/api/applicant/jobs');
+  $('jobList').innerHTML = jobs.length ? '' : '<div class="card">No open jobs right now.</div>';
+  for (const job of jobs) {
+    const parts = Object.entries(job.breakdown).map(([name, score]) => `${esc(name)} ${score}`).join(' | ');
+    let action = '<span class="badge APPROVED">Applied</span>';
+    if (!job.applied) action = job.hasResume
+      ? `<button onclick="openResume(${job.id})">Open resume</button>`
+      : `<button onclick="makeResume(${job.id}, this)">Write resume with Gemini</button>`;
+    $('jobList').insertAdjacentHTML('beforeend', `
+      <article class="card">
+        <div class="head"><div><h3>${esc(job.title)}</h3>
+          <div class="muted">${esc(job.company)} | ${esc(job.location)} | ${esc(job.salary)} | apply by ${esc(job.deadline)}</div></div>
+          <span class="score">${Math.round(job.score)}% match</span></div>
+        <p>${esc(job.description)}</p>
+        <p class="muted"><b>Needs:</b> ${esc(job.requiredSkills)}<br><b>Qualifications:</b> ${esc(job.qualifications)}<br><b>Score parts:</b> ${parts}</p>
+        <div class="row">${action}</div>
+      </article>`);
+  }
+}
+
+async function makeResume(jobId, button) {
+  button.disabled = true; button.textContent = 'Gemini is writing...';
+  const ok = await run(async () => { await api('/api/applicant/generateResume', { jobId }); return true; });
+  if (ok) await openResume(jobId); else { button.disabled = false; button.textContent = 'Write resume with Gemini'; }
+}
+
+async function openResume(jobId) {
+  await run(async () => {
+    const r = await api('/api/applicant/resume?jobId=' + jobId);
+    $('resumeText').value = r.text;
+    $('resumeBox').dataset.jobId = jobId;
+    $('resumeTitle').textContent = 'Resume (job number ' + jobId + ')';
+    $('resumeBox').classList.remove('hidden');
+    $('resumeBox').scrollIntoView();
+  });
+}
+
+function closeResume() { $('resumeBox').classList.add('hidden'); loadJobs(); }
+
+function saveResume() {
+  run(async () => {
+    await api('/api/applicant/saveResume', { jobId: $('resumeBox').dataset.jobId, text: $('resumeText').value });
+    say('Resume saved.', 'ok');
+  });
+}
+
+function applyNow() {
+  if (!confirm('Send this resume to the employer? You cannot apply to this job again.')) return;
+  run(async () => {
+    await api('/api/applicant/saveResume', { jobId: $('resumeBox').dataset.jobId, text: $('resumeText').value });
+    await api('/api/applicant/apply', { jobId: $('resumeBox').dataset.jobId });
+    say('Application sent!', 'ok');
+    closeResume();
+  });
+}
+
+/** Opens the print window. Choose "Save as PDF" as the printer to get a PDF file. */
+function printResume() {
+  const win = window.open('', '_blank');
+  win.document.write('<pre style="font-family:Arial;font-size:14px;white-space:pre-wrap">' + esc($('resumeText').value) + '</pre>');
+  win.document.close();
+  win.print();
+}
+
+async function loadApplications() {
+  const apps = await api('/api/applicant/applications');
+  $('applicationList').innerHTML = apps.length ? '' : '<div class="card">You have not applied to any job yet.</div>';
+  for (const a of apps) {
+    $('applicationList').insertAdjacentHTML('beforeend',
+      `<div class="card head"><div><h3>${esc(a.jobTitle)}</h3><span class="muted">${esc(a.company)}</span></div><span class="badge ${a.status}">${a.status}</span></div>`);
+  }
+}
+
+// ---------- employer ----------
+$('jobForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  run(async () => {
+    await api('/api/employer/postJob', formValues(e.target));
+    e.target.reset();
+    say('Job posted. It is waiting for admin approval.', 'ok');
+  });
+});
+
+async function loadMyJobs() {
+  const jobs = await api('/api/employer/myJobs');
+  $('myJobList').innerHTML = jobs.length ? '' : '<div class="card">You have not posted any jobs.</div>';
+  for (const job of jobs) {
+    const close = job.status === 'APPROVED' ? `<button class="warn" onclick="closeJob(${job.id})">Close job</button>` : '';
+    $('myJobList').insertAdjacentHTML('beforeend',
+      `<div class="card head"><div><h3>${esc(job.title)}</h3><span class="muted">Deadline ${esc(job.deadline)}</span></div>
+       <div class="row"><span class="badge ${job.status}">${job.status}</span>${close}</div></div>`);
+  }
+}
+
+function closeJob(jobId) {
+  if (!confirm('Close this job? It cannot be reopened.')) return;
+  run(async () => { await api('/api/employer/closeJob', { jobId }); await loadMyJobs(); });
+}
+
+async function loadReceived() {
+  const apps = await api('/api/employer/applications');
+  $('receivedList').innerHTML = apps.length ? '' : '<div class="card">No applications yet.</div>';
+  for (const a of apps) {
+    const buttons = a.status === 'PENDING'
+      ? `<div class="row"><button onclick="decide(${a.id}, 'accept')">Accept</button><button class="warn" onclick="decide(${a.id}, 'reject')">Reject</button></div>` : '';
+    $('receivedList').insertAdjacentHTML('beforeend', `
+      <div class="card"><div class="head"><div><h3>${esc(a.applicant)}</h3><span class="muted">for ${esc(a.jobTitle)}</span></div>
+        <span class="badge ${a.status}">${a.status}</span></div>
+        <details><summary>View resume</summary><pre>${esc(a.resume)}</pre></details>${buttons}</div>`);
+  }
+}
+
+function decide(id, decision) {
+  if (!confirm('This decision is final. Continue?')) return;
+  run(async () => { await api('/api/employer/decide', { id, decision }); await loadReceived(); });
+}
+
+// ---------- admin ----------
+async function loadPending() {
+  const jobs = await api('/api/admin/pending');
+  $('pendingList').innerHTML = jobs.length ? '' : '<div class="card">Nothing is waiting for approval.</div>';
+  for (const job of jobs) {
+    $('pendingList').insertAdjacentHTML('beforeend', `
+      <div class="card"><h3>${esc(job.title)}</h3>
+        <div class="muted">${esc(job.company)} | ${esc(job.location)} | ${esc(job.salary)} | deadline ${esc(job.deadline)}</div>
+        <p>${esc(job.description)}</p>
+        <p class="muted"><b>Skills:</b> ${esc(job.requiredSkills)}<br><b>Qualifications:</b> ${esc(job.qualifications)}</p>
+        <div class="row"><button onclick="decideJob(${job.id}, 'approve')">Approve</button>
+        <button class="warn" onclick="decideJob(${job.id}, 'reject')">Reject</button></div></div>`);
+  }
+}
+
+function decideJob(jobId, decision) {
+  run(async () => { await api('/api/admin/decide', { jobId, decision }); await loadPending(); });
+}
+
+// ---------- start: if we already have a token, skip the login page ----------
+if (token) {
+  api('/api/auth/me').then(enter).catch(() => sessionStorage.removeItem('token'));
+}
+</script>
+</body>
+</html>
