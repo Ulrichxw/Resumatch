@@ -2,7 +2,7 @@ import com.sun.net.httpserver.HttpServer;
 import java.net.InetSocketAddress;
 
 /** Start here. Builds the objects, connects the URLs to the handlers and starts the server. */
-public class Main {
+public class main {
 
     public static void main(String[] args) throws Exception {
         DataStore store = new DataStore();
